@@ -1,1 +1,0 @@
-# slick-hero-slider-grapesjs
