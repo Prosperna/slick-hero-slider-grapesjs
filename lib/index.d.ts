@@ -47,3 +47,10 @@ export interface SlickSlider {
   nextArrow?: any;
   prevArrow?: any;
 }
+
+export interface LocalOptions {
+  [key: string]: any;
+}
+export interface ScriptProps {
+  classContainer?: string;
+}

@@ -1,6 +1,6 @@
 {
   "name": "slick-hero-slider-grapesjs",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "",
   "main": "index.ts",
   "scripts": {
@@ -43,7 +43,8 @@
   "files": [
     "dist",
     "src",
-    "index.ts"
+    "index.ts",
+    "lib"
   ],
   "dependencies": {
     "grapesjs": "^0.21.2"

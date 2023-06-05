@@ -1,9 +1,5 @@
-import { HeroOptions, SlickSlider } from "../types";
 import { Editor } from "grapesjs";
-
-interface ScriptProps {
-  classContainer?: string;
-}
+import { HeroOptions, ScriptProps, SlickSlider } from "../lib";
 
 const script = function (
   this: {

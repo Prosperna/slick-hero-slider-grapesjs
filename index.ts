@@ -2,11 +2,7 @@ import { Editor } from "grapesjs";
 import loadComponents from "./src/components";
 import loadBlocks from "./src/blocks";
 import loadTraits from "./src/traits";
-import { HeroOptions } from "./types";
-
-interface LocalOptions {
-  [key: string]: any;
-}
+import { HeroOptions, LocalOptions } from "./lib";
 
 export default (editor: Editor, options: HeroOptions) => {
   const localOptions = {

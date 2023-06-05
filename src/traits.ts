@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
-import { HeroOptions, SlickSlider } from "../types";
 import { Editor } from "grapesjs";
+import { HeroOptions, SlickSlider } from "../lib";
 
 export default (editor: Editor, options: HeroOptions) => {
   const tm = editor.TraitManager;
