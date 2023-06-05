@@ -1,8 +1,5 @@
-import { Editor } from "grapesjs";
-import { HeroOptions } from "../lib";
-
 // eslint-disable-next-line import/no-anonymous-default-export
-export default (editor: Editor, options: HeroOptions) => {
+export default (editor, options) => {
   const bm = editor.BlockManager;
   const style = /*css*/ `
     <style>

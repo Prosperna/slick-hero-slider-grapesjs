@@ -1,63 +1,38 @@
+import { HeroOptions, SlickSlider } from "@/types";
 import { Editor } from "grapesjs";
-import { HeroOptions, ScriptProps, SlickSlider } from "../lib";
 
-const script = function (
-  this: {
-    traits: (
-      | {
-          name: string;
-          type: string;
-          changeProp: true;
-          full?: undefined;
-          label?: undefined;
-          text?: undefined;
-          command?: undefined;
-        }
-      | {
-          name: string;
-          full: true;
-          label: string;
-          type: string;
-          text: string;
-          changeProp: true;
-          command: (editor: any, sender: any) => void;
-        }
-    )[];
-    script: (props: ScriptProps) => void;
-    classContainer: string | undefined;
-    "script-props": string[];
-  },
-  props: ScriptProps
-) {
+const script = function (props) {
   const classContainer = props.classContainer;
   const initializeLibrary = function () {
-    (<any>$(document)).ready(function () {
-      (<any>$(`.${classContainer}`)).not(".slick-initialized").slick({
-        arrows: true,
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        // centerMode: true,
-        // variableWidth: true,
-        // draggable: true,
-        slidesToScroll: 1,
-        prevArrow: /*html*/ `
+    $(document).ready(function () {
+      $(`.${classContainer}`)
+        .not(".slick-initialized")
+        .slick({
+          arrows: true,
+          dots: true,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 1,
+          // centerMode: true,
+          // variableWidth: true,
+          // draggable: true,
+          slidesToScroll: 1,
+          prevArrow: /*html*/ `
             <button type="button" class="slick-prev">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M29.2504 36.0004L31.4004 33.8504L21.5004 23.9504L31.4004 14.0504L29.2504 11.9004L17.2004 23.9504L29.2504 36.0004Z" fill="black"/>
               </svg>          
             </button>
         `,
-        nextArrow: /*html*/ `
+          nextArrow: /*html*/ `
             <button type="button" class="slick-next">
               <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M18.7496 36.0004L16.5996 33.8504L26.4996 23.9504L16.5996 14.0504L18.7496 11.9004L30.7996 23.9504L18.7496 36.0004Z" fill="black"/>
               </svg>          
             </button>
         `,
-        adaptiveHeight: true,
-      } as SlickSlider);
+          adaptiveHeight: true,
+        });
     });
   };
   if (typeof this == undefined) {
@@ -71,7 +46,7 @@ const script = function (
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-export default (editor: Editor, options: HeroOptions) => {
+export default (editor, options) => {
   const dc = editor.DomComponents;
   const defaultType = dc.getType("default");
   const defaultView = defaultType.view;
@@ -82,7 +57,7 @@ export default (editor: Editor, options: HeroOptions) => {
           {
             name: "addNewSlideButton",
             type: "addNewSlideButton",
-            changeProp: true,
+            changeProp: 1,
           },
           {
             name: "addNewSlideButton",
@@ -90,8 +65,9 @@ export default (editor: Editor, options: HeroOptions) => {
             label: "",
             type: "button",
             text: "Add new slide",
-            changeProp: true,
-            command: (editor: any, sender: any) => {
+            noLabel: true,
+            changeProp: 1,
+            command: (editor, sender) => {
               const model = sender.target;
               console.log({ sender });
               const el = sender.target.view.el;
@@ -103,17 +79,25 @@ export default (editor: Editor, options: HeroOptions) => {
                 label: `Slide ${newSlidesLength}`,
                 name: `slide${newSlidesLength}`,
                 options: [
-                  { value: "heroImagePlacementLeft", name: "With Hero Image on Left" },
-                  { value: "heroImagePlacementRight", name: "WIth Hero Image on Right" },
+                  {
+                    value: "heroImagePlacementLeft",
+                    name: "With Hero Image on Left",
+                  },
+                  {
+                    value: "heroImagePlacementRight",
+                    name: "WIth Hero Image on Right",
+                  },
                   { value: "removeSlide", name: "Remove slide" },
                 ],
                 changeProp: 1,
               };
 
               model.addTrait(newTrait);
-              (<any>$(".slide-show")).not(".slick-initialized").slick(
-                "slickAdd",
-                `<div class="slick-slide" id="slide${currentNumberOfSlides}">
+              $(".slide-show")
+                .not(".slick-initialized")
+                .slick(
+                  "slickAdd",
+                  `<div class="slick-slide" id="slide${currentNumberOfSlides}">
                   <div class="hero-slide slide-wrapper basic-hero__wrapper">
                       <div class="d-flex align-items-center justify-content-center">
                         <h2 class="display-3 fw-semibold">Heading</h2>
@@ -129,7 +113,7 @@ export default (editor: Editor, options: HeroOptions) => {
                       </div>
                   </div>
                 </div>`
-              );
+                );
               // (<any>$(".slick-slider")).slick(
               //   "slickAdd",
               //   `
@@ -382,7 +366,7 @@ export default (editor: Editor, options: HeroOptions) => {
       if (
         el.className &&
         typeof el.className === "string" &&
-        el.className.includes(options.classContainer as string)
+        el.className.includes(options.classContainer)
       ) {
         return {
           type: options.name,
@@ -390,9 +374,9 @@ export default (editor: Editor, options: HeroOptions) => {
       }
     },
     view: defaultView.extend({
-      onRender({ el, model }: { el: any; model: any }) {
+      onRender({ el, model }) {
         console.log("default view extend");
-        const onChangeSlideTemplate = (slideName: string, selectedTemplate: string) => {
+        const onChangeSlideTemplate = (slideName, selectedTemplate) => {
           console.log({ selectedTemplate, slideName });
           if (selectedTemplate === "removeSlide") {
             model.removeTrait(slideName);
@@ -402,7 +386,11 @@ export default (editor: Editor, options: HeroOptions) => {
         const currentNumberOfSlides = el.children.length;
         console.log({ model });
         if (currentNumberOfSlides > 0) {
-          for (let slideNum = 1; slideNum <= currentNumberOfSlides; slideNum++) {
+          for (
+            let slideNum = 1;
+            slideNum <= currentNumberOfSlides;
+            slideNum++
+          ) {
             const slideTraitName = `slide${slideNum}`;
             const event = `change:${slideTraitName}`;
             // (<any>$(".slide-show")).not(".slick-initialized").slick("slickRemove", slideNum - 1);
@@ -411,8 +399,14 @@ export default (editor: Editor, options: HeroOptions) => {
               label: `Slide ${slideNum}`,
               name: slideTraitName,
               options: [
-                { value: "heroImagePlacementLeft", name: "With Hero Image on Left" },
-                { value: "heroImagePlacementRight", name: "WIth Hero Image on Right" },
+                {
+                  value: "heroImagePlacementLeft",
+                  name: "With Hero Image on Left",
+                },
+                {
+                  value: "heroImagePlacementRight",
+                  name: "WIth Hero Image on Right",
+                },
                 { value: "removeSlide", name: "Remove slide" },
               ],
               changeProp: 1,
@@ -425,7 +419,7 @@ export default (editor: Editor, options: HeroOptions) => {
           }
         }
 
-        model.on("change:addNewSlideButton", (component: any) => {
+        model.on("change:addNewSlideButton", (component) => {
           console.log({ component });
         });
       },

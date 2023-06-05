@@ -1,20 +1,19 @@
-import { Editor } from "grapesjs";
+import grapesjs from "grapesjs";
 import loadComponents from "./src/components";
 import loadBlocks from "./src/blocks";
 import loadTraits from "./src/traits";
-import { HeroOptions, LocalOptions } from "./lib";
 
-export default (editor: Editor, options: HeroOptions) => {
-  const localOptions = {
+export default (editor, options) => {
+  let localOptions = {
     label: "Hero",
     name: "hero",
     category: "Elements",
     classContainer: "slick-slider",
-  } as LocalOptions;
+  };
 
-  for (const name in localOptions) {
+  for (let name in localOptions) {
     if (!(name in options)) {
-      options[name as keyof HeroOptions] = localOptions[name];
+      options[name] = localOptions[name];
     }
   }
   loadBlocks(editor, options);
