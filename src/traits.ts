@@ -86,7 +86,7 @@ export default (editor: Editor, options: HeroOptions) => {
       script.onload = initializeLibrary;
       script.src = "https://www.jsdelivr.com/projects/jquery.slick";
       document.body.appendChild(script);
-      el.addEventListener("click", (ev) => {
+      el.addEventListener("click", (ev: any) => {
         const model = props.trait.target;
         model.append(`<div class="slick-slide" id="slide4">
         <div class="hero-slide slide-wrapper basic-hero__wrapper">

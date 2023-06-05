@@ -1,4 +1,4 @@
-import grapesjs, { Editor } from "grapesjs";
+import { Editor } from "grapesjs";
 import loadComponents from "./src/components";
 import loadBlocks from "./src/blocks";
 import loadTraits from "./src/traits";
