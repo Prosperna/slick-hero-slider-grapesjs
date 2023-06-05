@@ -1,7 +1,7 @@
 import grapesjs from "grapesjs";
-import loadComponents from "./src/components";
-import loadBlocks from "./src/blocks";
-import loadTraits from "./src/traits";
+import loadComponents from "./src/components.js";
+import loadBlocks from "./src/blocks.js";
+import loadTraits from "./src/traits.js";
 
 export default (editor, options) => {
   let localOptions = {

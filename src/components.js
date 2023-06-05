@@ -1,5 +1,4 @@
-import { HeroOptions, SlickSlider } from "@/types";
-import { Editor } from "grapesjs";
+import $ from "jquery";
 
 const script = function (props) {
   const classContainer = props.classContainer;
@@ -363,11 +362,7 @@ export default (editor, options) => {
       },
     },
     isComponent: (el) => {
-      if (
-        el.className &&
-        typeof el.className === "string" &&
-        el.className.includes(options.classContainer)
-      ) {
+      if (el.className && typeof el.className === "string" && el.className.includes(options.classContainer)) {
         return {
           type: options.name,
         };
@@ -386,11 +381,7 @@ export default (editor, options) => {
         const currentNumberOfSlides = el.children.length;
         console.log({ model });
         if (currentNumberOfSlides > 0) {
-          for (
-            let slideNum = 1;
-            slideNum <= currentNumberOfSlides;
-            slideNum++
-          ) {
+          for (let slideNum = 1; slideNum <= currentNumberOfSlides; slideNum++) {
             const slideTraitName = `slide${slideNum}`;
             const event = `change:${slideTraitName}`;
             // (<any>$(".slide-show")).not(".slick-initialized").slick("slickRemove", slideNum - 1);
