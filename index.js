@@ -3,7 +3,7 @@ import loadComponents from "./src/components.js";
 import loadBlocks from "./src/blocks.js";
 import loadTraits from "./src/traits.js";
 
-export default (editor, options) => {
+export default grapesjs.plugins.add("hero-slick-slider", (editor, options) => {
   let localOptions = {
     label: "Hero",
     name: "hero",
@@ -19,4 +19,4 @@ export default (editor, options) => {
   loadBlocks(editor, options);
   loadComponents(editor, options);
   loadTraits(editor, options);
-};
+});
