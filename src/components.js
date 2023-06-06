@@ -1,3 +1,5 @@
+import { newSlideTrait, onChangeSlideTemplate } from "./lib/helpers";
+
 const script = function (props) {
   const classContainer = props.classContainer;
   const initializeLibrary = function () {
@@ -27,7 +29,7 @@ const script = function (props) {
         adaptiveHeight: true,
       });
   };
-  if (typeof this == undefined) {
+  if (typeof $.fn.slick() == undefined) {
     const script = document.createElement("script");
     script.onload = initializeLibrary;
     script.src = "https://www.jsdelivr.com/projects/jquery.slick";
@@ -46,11 +48,6 @@ export default (editor, options) => {
     model: {
       defaults: {
         traits: [
-          // {
-          //   name: "addNewSlideButton",
-          //   type: "addNewSlideButton",
-          //   changeProp: 1,
-          // },
           {
             name: "addNewSlideButton",
             full: true,
@@ -63,57 +60,66 @@ export default (editor, options) => {
               const model = sender.target;
               const el = sender.target.view.el;
               const currentSlides = el.children[3].children;
+              console.log({ currentSlides });
               const currentNumberOfSlides = currentSlides.length;
               const newSlidesLength = currentNumberOfSlides + 1;
-              const newTrait = {
-                type: "select",
-                label: `Slide ${newSlidesLength}`,
-                name: `slide${newSlidesLength}`,
-                options: [
-                  {
-                    value: "defaultTemplate",
-                    name: "Default Template",
-                  },
-                  {
-                    value: "heroImagePlacementLeft",
-                    name: "With Hero Image on Left",
-                  },
-                  {
-                    value: "heroImagePlacementRight",
-                    name: "WIth Hero Image on Right",
-                  },
-                  { value: "removeSlide", name: "Remove slide" },
-                ],
-                changeProp: 1,
-              };
+              const slideTraitName = `slide${newSlidesLength}`;
 
-              model.addTrait(newTrait);
+              model.addTrait(newSlideTrait(slideTraitName, newSlidesLength));
+              model.on(`change:slide${newSlidesLength}`, function () {
+                const selectedTemplate = model.get(slideTraitName);
+                onChangeSlideTemplate({
+                  slideName: slideTraitName,
+                  selectedTemplate,
+                  slideNum: newSlidesLength,
+                  model,
+                  el,
+                });
+              });
 
               el.slick.addSlide(
                 /*html*/
-                `<div class="slick-slide" id="slide${currentNumberOfSlides}">
-                    <div class="hero-slide slide-wrapper basic-hero__wrapper">
-                      <div class="d-flex align-items-center justify-content-center">
-                        <h2 class="display-3 fw-semibold">Heading</h2>
+                `<div class="slick-slide" id="slide${newSlidesLength}">
+                    <div class="hero-template">
+                      <div class="content-left container">
+                        <div class="hero-media">
+                          <div class="image-container">
+                            <img
+                              src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                              alt="Add file"
+                            />
+                          </div>
+                        </div>
                       </div>
-                      <div class="d-flex align-items-center justify-content-center">
-                        <h4 class="display-5 fw-semibold">Subheading</h4>
+                      <div class="hero-main container">
+                        <h2 class="display-3 fw-semibold heading">Heading</h2>
+                        <h4 class="display-5 fw-semibold subheading">Subheading</h4>
+                        <p class="lead description">Description</p>
+                        <div class="call-to-action">
+                          <a href="#" class="btn btn-primary btn-lg px-4">Hover me</a>
+                        </div>
                       </div>
-                      <div class="d-flex align-items-center justify-content-center description">
-                        <p class="lead mb-4">Description</p>
-                      </div>
-                      <div class="d-flex justify-content-center align-items-center">
-                        <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+                      <div class="content-right container">
+                        <div class="hero-media">
+                          <div class="image-container">
+                            <img
+                              src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                              alt="Add file"
+                            />
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                  `
+                </div>
+                `
               );
+              model.set(slideTraitName, "defaultTemplate");
             },
           },
           {
             type: "select",
-            label: `Hide Slide Indicators`,
+            label: `Toggle Slide Indicators`,
             name: "toggleSlideIndicators",
             options: [
               {
@@ -127,10 +133,45 @@ export default (editor, options) => {
             ],
             changeProp: 1,
           },
+          {
+            type: "select",
+            label: `Toggle Slide Arrows`,
+            name: "toggleSlideArrows",
+            options: [
+              {
+                value: "showSlideArrows",
+                name: "Show",
+              },
+              {
+                value: "hideSlideArrows",
+                name: "Hide",
+              },
+            ],
+            changeProp: 1,
+          },
         ],
         script,
         classContainer: options.classContainer,
         "script-props": ["classContainer", "traits"],
+      },
+      updated(prop, value, prev) {
+        console.log({ prop, value, prev });
+        if (typeof value !== "string") {
+          value.models.map((model, index) => {
+            const attrib = model.attributes;
+            if (attrib.name.includes("slide") && attrib.type === "select") {
+              const newSlideNum = 4 - index;
+              const slideTraitName = `slide${newSlideNum}`;
+              console.log({ model });
+              // model.setAttributes({
+              //   id: slideTraitName,
+              //   label: `Slide ${newSlideNum}`,
+              //   name: slideTraitName,
+              // });
+            }
+            return model;
+          });
+        }
       },
     },
     isComponent: (el) => {
@@ -142,45 +183,28 @@ export default (editor, options) => {
     },
     view: defaultView.extend({
       onRender({ el, model }) {
-        const onChangeSlideTemplate = (slideName, selectedTemplate, slideNum) => {
-          const slideIndex = slideNum - 1;
-          if (selectedTemplate === "removeSlide") {
-            model.removeTrait(slideName);
-            el.slick.removeSlide(slideIndex);
-          }
-          const slide = document.querySelector(`#${slideName}`);
-          const components = editor.getSelected("components");
-          console.log({ slide, slideName, el, model, components });
-        };
-
         const currentNumberOfSlides = el.children.length;
-
+        // for (let childNum = 0; childNum < el.children.length; childNum++) {
+        //   const child = el.children[childNum];
+        //   console.log({ child });
+        // }
         if (currentNumberOfSlides > 0) {
           for (let slideNum = 1; slideNum <= currentNumberOfSlides; slideNum++) {
+            const child = el.children[slideNum - 1];
             const slideTraitName = `slide${slideNum}`;
             const event = `change:${slideTraitName}`;
-            // (<any>$(".slide-show")).not(".slick-initialized").slick("slickRemove", slideNum - 1);
-            const newTrait = {
-              type: "select",
-              label: `Slide ${slideNum}`,
-              name: slideTraitName,
-              options: [
-                {
-                  value: "heroImagePlacementLeft",
-                  name: "With Hero Image on Left",
-                },
-                {
-                  value: "heroImagePlacementRight",
-                  name: "WIth Hero Image on Right",
-                },
-                { value: "removeSlide", name: "Remove slide" },
-              ],
-              changeProp: 1,
-            };
-            model.addTrait(newTrait);
+            model.addTrait(newSlideTrait(slideTraitName, slideNum));
+            model.set(slideTraitName, "defaultTemplate");
             model.on(event, () => {
               const selectedTemplate = model.get(slideTraitName);
-              onChangeSlideTemplate(slideTraitName, selectedTemplate, slideNum);
+              onChangeSlideTemplate({
+                model,
+                el,
+                slideName: slideTraitName,
+                selectedTemplate,
+                slideNum,
+                child,
+              });
             });
           }
         }
@@ -190,6 +214,16 @@ export default (editor, options) => {
             el.slick.slickSetOption("dots", false, true);
           } else {
             el.slick.slickSetOption("dots", true, true);
+          }
+        });
+        model.on("change:toggleSlideArrows", function () {
+          const toggleSlideArrows = model.get("toggleSlideArrows");
+          if (toggleSlideArrows === "hideSlideArrows") {
+            el.slick.slickSetOption("arrows", false, true);
+            el.slick.slickPlay();
+          } else {
+            el.slick.slickSetOption("arrows", true, true);
+            el.slick.slickPause();
           }
         });
       },

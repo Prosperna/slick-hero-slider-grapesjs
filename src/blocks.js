@@ -3,150 +3,135 @@ export default (editor, options) => {
   const bm = editor.BlockManager;
   const style = /*css*/ `
     <style>
-        .slick-slider {
-          border: 1px solid gold;
-          min-height: 100vh;
-          height: 100%;
-          position: relative;
-          overflow: hidden;
-        }
-        .slick-prev, .slick-next {
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          color: #000;
-          background-color: transparent;
-          border: none;
-          padding: 10px;
-          cursor: pointer;
-        }
+      .slick-slider {
+        min-height: calc(100vh - 5rem);
+        height: 90%;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
+      .slick-prev,
+      .slick-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #000;
+        background-color: transparent;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+      }
 
-        .slick-prev.slick-arrow {
-          left: 5px;
-          z-index: 20;
-        }
-        .slick-next.slick-arrow {
-          right: 5px;
-          z-index: 20;
-        }
-        .slick-slider .slick-slide {
-          opacity: 0;
-          transition: opacity 0.3s;
-        }
-        
-        .slick-slider .slick-slide.slick-current {
-          opacity: 1;
-        }
-        
-        .slick-slider .slick-dots {
-          position: absolute;
-          bottom: 20px;
-          left: 0;
-          right: 0;
-          display: flex;
-          justify-content: center;
-        }
-        
-        .slick-slider .slick-dots li {
-          list-style: none;
-          margin: 0 5px;
-        }
-        
-        .slick-slider .slick-dots li button {
-          background-color: #fff;
-          border: 1px solid rgba(0, 0, 0, 0.2);
-          border-radius: 50%;
-          width: 20px;
-          height: 20px;
-          cursor: pointer;
-          outline: none;
-          text-indent: -9999em; 
-        }
-        
-        .slick-slider .slick-dots li.slick-active button {
-          background-color: #bbb;
-        }
-        .slide-wrapper {
-          min-height: 100vh;
-          height: 100%;
-          min-width: calc(100vw - 160px);
-          width: 100%;
-        }
-        .basic-hero__wrapper {
-          text-align: center;
-          display: grid;
-          grid-template-rows: repeate(5, 1fr);
-          gap: 1rem;
-        }
-        /* Hero Slide */
-        .hero-slide {
-          background-color: #fff;
-          padding: 80px;
-          
-        }
-        .hero-template-2 {
-          width: 100vw;
-          height: 100vh;
-          padding-right: 5rem;
-          padding-left: 5rem;
-          padding-bottom: 5rem;
-          padding-top: 2rem;
-        }
-        .hero-wrapper {
-          height: 100%;
-          width: 100%;
-          display: grid;
-          grid-template-columns: repeat(2, 1fr);
-          gap: 1rem;
-        }
-        .hero-content {
-          height: 100%;
-          width: 100%;
-          display: flex;
-          align-items: center;
-        }
-        .t2-content-left {
-          padding: 4rem 1rem;
-          display: grid;
-          grid-template-rows: repeat(5, 1fr);
-          gap: 1rem;
-          justify-items: stretch;
-          align-items: stretch;
-        }
-        .t2-content-right {
-          padding: 1rem;
-          display: flex;
-          align-items: center;
-        }
-        /* .hero-image {
-          height: 200px;
-        } */
-        .image-container {
-          position: relative;
-          max-width: 100%;
-        }
-        
-        .image-container img {
-          width: 100%;
-          height: auto;
-        }
-        .description {
-          grid-row: 3 / span 2;
-        }
-        .t3-content-right {
-          padding: 4rem 1rem;
-          display: grid;
-          grid-template-rows: repeat(5, 1fr);
-          gap: 1rem;
-          justify-items: stretch;
-          align-items: stretch;
-        }
-        .t3-content-left {
-          padding: 1rem;
-          display: flex;
-          align-items: center;
-        }
-        
+      .slick-prev.slick-arrow {
+        left: 5px;
+        z-index: 20;
+      }
+      .slick-next.slick-arrow {
+        right: 5px;
+        z-index: 20;
+      }
+      .slick-slider .slick-slide {
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .slick-slider .slick-slide.slick-current {
+        opacity: 1;
+      }
+
+      .slick-slider .slick-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+      }
+
+      .slick-slider .slick-dots li {
+        list-style: none;
+        margin: 0 5px;
+      }
+
+      .slick-slider .slick-dots li button {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        outline: none;
+        text-indent: -9999em;
+      }
+
+      .slick-slider .slick-dots li.slick-active button {
+        background-color: #bbb;
+      }
+      .slick-slide {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .hero-template {
+        height: 400px;
+        width: calc(100vw - 150px);
+        margin: 0 auto;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        /* display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        border: 1px solid red; */
+      }
+      .content-left {
+        display: none;
+        /* padding: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center; */
+      }
+
+      .content-right {
+        display: none;
+      }
+      .hero-media {
+        position: relative;
+        height: 350px;
+        width: 350px;
+      }
+      .hero-main {
+        display: grid;
+        grid-template-rows: repeat(4, 1fr);
+        gap: 1rem;
+        justify-items: stretch;
+        align-items: stretch;
+      }
+      .heading {
+        text-align: center;
+        margin-bottom: 0;
+      }
+      .subheading {
+        text-align: center;
+        margin-bottom: 0;
+      }
+      .description {
+        text-align: center;
+        margin-bottom: 0;
+      }
+      .call-to-action {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .image-container {
+        position: absolute;
+        inset: 0px;
+      }
+      .image-container img {
+        width: 100%;
+        height: 100%;
+      }
     </style>
   `;
 
@@ -162,39 +147,59 @@ export default (editor, options) => {
     content: /* html */ ` 
       <div class="slick-slider" id="slick-slider">
         <div class="slick-slide" id="slide1">
-          <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              <div class="d-flex align-items-center justify-content-center">
-                <h2 class="display-3 fw-semibold">Heading</h2>
+          <div class="hero-template">
+            <div class="content-left container">
+              <div class="hero-media">
+                <div class="image-container">
+                  <img
+                    src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-image-or-video.png"
+                    alt="Add image or video here"
+                  />
+                </div>
               </div>
-              <div class="d-flex align-items-center justify-content-center">
-                <h4 class="display-5 fw-semibold">Subheading</h4>
+            </div>
+            <div class="hero-main container">
+              <h2 class="display-3 fw-semibold heading">Heading</h2>
+              <h4 class="display-5 fw-semibold subheading">Subheading</h4>
+              <p class="lead description">Description</p>
+              <div class="call-to-action">
+                <a href="#" class="btn btn-primary btn-lg px-4">Hover me</a>
               </div>
-              <div class="d-flex align-items-center justify-content-center description">
-                <p class="lead mb-4">Description</p>
-              </div> 
-              <div class="d-flex justify-content-center align-items-center">
-                <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+            </div>
+            <div class="content-right container">
+              <div class="hero-media">
+                <div class="image-container">
+                  <img
+                    src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                    alt="Add file"
+                  />
+                </div>
               </div>
+            </div>
           </div>
         </div>
         <div class="slick-slide" id="slide2">
-          <div class="hero-template-2">
-            <div class="hero-wrapper">
-              <div class="hero-content t2-content-left">
-                <div class="d-flex align-items-center justify-content-center">
-                  <h2 class="display-3 fw-semibold">Heading</h2>
-                </div>
-                <div class="d-flex align-items-center justify-content-center">
-                  <h4 class="display-5 fw-semibold">Subheading</h4>
-                </div>
-                <div class="d-flex align-items-center justify-content-center description">
-                  <p class="lead mb-4">Description</p>
-                </div>
-                <div class="d-flex justify-content-center align-items-center">
-                  <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+          <div class="hero-template">
+            <div class="content-left container">
+              <div class="hero-media">
+                <div class="image-container">
+                  <img
+                    src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-image-or-video.png"
+                    alt="Add image or video here"
+                  />
                 </div>
               </div>
-              <div class="hero-content t2-content-right">
+            </div>
+            <div class="hero-main container">
+              <h2 class="display-3 fw-semibold heading">Heading</h2>
+              <h4 class="display-5 fw-semibold subheading">Subheading</h4>
+              <p class="lead description">Description</p>
+              <div class="call-to-action">
+                <a href="#" class="btn btn-primary btn-lg px-4">Hover me</a>
+              </div>
+            </div>
+            <div class="content-right container">
+              <div class="hero-media">
                 <div class="image-container">
                   <img
                     src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
@@ -206,9 +211,9 @@ export default (editor, options) => {
           </div>
         </div>
         <div class="slick-slide" id="slide3">
-          <div class="hero-template-2">
-            <div class="hero-wrapper">
-              <div class="hero-content t3-content-left">
+          <div class="hero-template">
+            <div class="content-left container">
+              <div class="hero-media">
                 <div class="image-container">
                   <img
                     src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
@@ -216,18 +221,22 @@ export default (editor, options) => {
                   />
                 </div>
               </div>
-              <div class="hero-content t3-content-right">
-                <div class="d-flex align-items-center justify-content-center">
-                  <h2 class="display-3 fw-semibold">Heading</h2>
-                </div>
-                <div class="d-flex align-items-center justify-content-center">
-                  <h4 class="display-5 fw-semibold">Subheading</h4>
-                </div>
-                <div class="d-flex align-items-center justify-content-center description">
-                  <p class="lead mb-4">Description</p>
-                </div>
-                <div class="d-flex justify-content-center align-items-center">
-                  <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+            </div>
+            <div class="hero-main container">
+              <h2 class="display-3 fw-semibold heading">Heading</h2>
+              <h4 class="display-5 fw-semibold subheading">Subheading</h4>
+              <p class="lead description">Description</p>
+              <div class="call-to-action">
+                <a href="#" class="btn btn-primary btn-lg px-4">Hover me</a>
+              </div>
+            </div>
+            <div class="content-right container">
+              <div class="hero-media">
+                <div class="image-container">
+                  <img
+                    src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                    alt="Add file"
+                  />
                 </div>
               </div>
             </div>
