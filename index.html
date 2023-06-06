@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>GrapesJS Plugin</title>
+    <link href="https://unpkg.com/grapesjs/dist/css/grapes.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
+    />
+
+    <script type="module" src="./index.js"></script>
+
+    <style>
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="gjs" style="height: 100vh; overflow: hidden"></div>
+
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+
+    <script
+      type="text/javascript"
+      src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"
+    ></script>
+
+    <script type="text/javascript">
+      setTimeout(() => {
+        const editor = grapesjs.init({
+          height: "100%",
+          noticeOnUnload: false,
+          storageManager: false,
+          container: "#gjs",
+          fromElement: true,
+          plugins: ["hero-slick-slider"],
+          pluginsOpts: {
+            "hero-slick-slider": {},
+          },
+        });
+        window.editor = editor;
+      }, 1000);
+    </script>
+  </body>
+</html>

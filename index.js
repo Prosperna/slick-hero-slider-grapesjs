@@ -1,9 +1,9 @@
-import grapesjs from "grapesjs";
+import "./node_modules/grapesjs/dist/grapes.min.js";
 import loadComponents from "./src/components.js";
 import loadBlocks from "./src/blocks.js";
 import loadTraits from "./src/traits.js";
 
-function heroSliderPlugin(editor, options) {
+const heroSlickSlider = function (editor, options) {
   let localOptions = {
     label: "Hero",
     name: "hero",
@@ -19,5 +19,5 @@ function heroSliderPlugin(editor, options) {
   loadBlocks(editor, options);
   loadComponents(editor, options);
   loadTraits(editor, options);
-}
-export default heroSliderPlugin;
+};
+grapesjs.plugins.add("hero-slick-slider", heroSlickSlider);

@@ -1,9 +1,9 @@
-import $ from "jquery";
+import loadJquery from "../lib/jquery.js";
 
 const script = function (props) {
   const classContainer = props.classContainer;
   const initializeLibrary = function () {
-    $(document).ready(function () {
+    $(function () {
       $(`.${classContainer}`)
         .not(".slick-initialized")
         .slick({
@@ -34,13 +34,17 @@ const script = function (props) {
         });
     });
   };
-  if (typeof this == undefined) {
-    const script = document.createElement("script");
-    script.onload = initializeLibrary;
-    script.src = "https://www.jsdelivr.com/projects/jquery.slick";
-    document.body.appendChild(script);
+  if (typeof $ == undefined) {
+    loadJquery();
   } else {
-    initializeLibrary();
+    if (typeof this == undefined) {
+      const script = document.createElement("script");
+      script.onload = initializeLibrary;
+      script.src = "https://www.jsdelivr.com/projects/jquery.slick";
+      document.body.appendChild(script);
+    } else {
+      initializeLibrary();
+    }
   }
 };
 

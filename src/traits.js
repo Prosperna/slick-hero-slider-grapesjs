@@ -1,5 +1,4 @@
 /* eslint-disable import/no-anonymous-default-export */
-import $ from "jquery";
 
 export default (editor, options) => {
   const tm = editor.TraitManager;
