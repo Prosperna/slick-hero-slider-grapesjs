@@ -9,9 +9,6 @@ const script = function (props) {
         infinite: true,
         speed: 500,
         slidesToShow: 1,
-        // centerMode: true,
-        // variableWidth: true,
-        // draggable: true,
         slidesToScroll: 1,
         prevArrow: /*html*/ `
             <button type="button" class="slick-prev">
@@ -49,11 +46,11 @@ export default (editor, options) => {
     model: {
       defaults: {
         traits: [
-          {
-            name: "addNewSlideButton",
-            type: "addNewSlideButton",
-            changeProp: 1,
-          },
+          // {
+          //   name: "addNewSlideButton",
+          //   type: "addNewSlideButton",
+          //   changeProp: 1,
+          // },
           {
             name: "addNewSlideButton",
             full: true,
@@ -62,9 +59,8 @@ export default (editor, options) => {
             text: "Add new slide",
             noLabel: true,
             changeProp: 1,
-            command: (editor, sender) => {
+            command: (_, sender) => {
               const model = sender.target;
-              console.log({ sender });
               const el = sender.target.view.el;
               const currentSlides = el.children[3].children;
               const currentNumberOfSlides = currentSlides.length;
@@ -74,6 +70,10 @@ export default (editor, options) => {
                 label: `Slide ${newSlidesLength}`,
                 name: `slide${newSlidesLength}`,
                 options: [
+                  {
+                    value: "defaultTemplate",
+                    name: "Default Template",
+                  },
                   {
                     value: "heroImagePlacementLeft",
                     name: "With Hero Image on Left",
@@ -88,12 +88,11 @@ export default (editor, options) => {
               };
 
               model.addTrait(newTrait);
-              $(".slide-show")
-                .not(".slick-initialized")
-                .slick(
-                  "slickAdd",
-                  `<div class="slick-slide" id="slide${currentNumberOfSlides}">
-                  <div class="hero-slide slide-wrapper basic-hero__wrapper">
+
+              el.slick.addSlide(
+                /*html*/
+                `<div class="slick-slide" id="slide${currentNumberOfSlides}">
+                    <div class="hero-slide slide-wrapper basic-hero__wrapper">
                       <div class="d-flex align-items-center justify-content-center">
                         <h2 class="display-3 fw-semibold">Heading</h2>
                       </div>
@@ -106,250 +105,27 @@ export default (editor, options) => {
                       <div class="d-flex justify-content-center align-items-center">
                         <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
                       </div>
+                    </div>
                   </div>
-                </div>`
-                );
-              // (<any>$(".slick-slider")).slick(
-              //   "slickAdd",
-              //   `
-              // <div class="slick-slide" id="slide${currentNumberOfSlides}">
-              //    <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //        <div class="d-flex align-items-center justify-content-center">
-              //          <h2 class="display-3 fw-semibold">Heading</h2>
-              //        </div>
-              //        <div class="d-flex align-items-center justify-content-center">
-              //          <h4 class="display-5 fw-semibold">Subheading</h4>
-              //        </div>
-              //        <div class="d-flex align-items-center justify-content-center description">
-              //          <p class="lead mb-4">Description</p>
-              //        </div>
-              //        <div class="d-flex justify-content-center align-items-center">
-              //          <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //        </div>
-              //    </div>
-              //  </div>
-              // `
-              // );
-              //   model.append(`
-              //   <div class="slick-slide" id="slide${currentNumberOfSlides}">
-              //     <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //         <div class="d-flex align-items-center justify-content-center">
-              //           <h2 class="display-3 fw-semibold">Heading</h2>
-              //         </div>
-              //         <div class="d-flex align-items-center justify-content-center">
-              //           <h4 class="display-5 fw-semibold">Subheading</h4>
-              //         </div>
-              //         <div class="d-flex align-items-center justify-content-center description">
-              //           <p class="lead mb-4">Description</p>
-              //         </div>
-              //         <div class="d-flex justify-content-center align-items-center">
-              //           <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //         </div>
-              //     </div>
-              //   </div>
-              // `);
-              // console.log({ el });
-              // (<any>$(".slick-slider")).slick(
-              //   "slickAdd",
-              //   `
-              //     <div class="slick-slide" id="slide${newSlidesLength}">
-              //       <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h2 class="display-3 fw-semibold">Heading</h2>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h4 class="display-5 fw-semibold">Subheading</h4>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center description">
-              //             <p class="lead mb-4">Description</p>
-              //           </div>
-              //           <div class="d-flex justify-content-center align-items-center">
-              //             <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //           </div>
-              //       </div>
-              //     </div>
-              //   `
-              // );
-              //   model.append(`
-              //   (<any>$('.slick-slider')).slick(
-              //     "slickAdd",
-              //     <div class="slick-slide" id="slide${newSlidesLength}">
-              //       <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h2 class="display-3 fw-semibold">Heading</h2>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h4 class="display-5 fw-semibold">Subheading</h4>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center description">
-              //             <p class="lead mb-4">Description</p>
-              //           </div>
-              //           <div class="d-flex justify-content-center align-items-center">
-              //             <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //           </div>
-              //       </div>
-              //     </div>
-              //   )
-              // `);
-              // console.log({ currentSlides, type: typeof currentSlides });
-              // for (let i = 0; i < currentNumberOfSlides; i++) {
-              //   const slide = currentSlides[i];
-              //   console.log({ i, slide });
-              //   model.append(`
-              //       <div class="slick-slide" id="slide${i + 1}">
-              //         <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //             <div class="d-flex align-items-center justify-content-center">
-              //               <h2 class="display-3 fw-semibold">Heading</h2>
-              //            </div>
-              //            <div class="d-flex align-items-center justify-content-center">
-              //              <h4 class="display-5 fw-semibold">Subheading</h4>
-              //            </div>
-              //            <div class="d-flex align-items-center justify-content-center description">
-              //              <p class="lead mb-4">Description</p>
-              //            </div>
-              //            <div class="d-flex justify-content-center align-items-center">
-              //              <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //            </div>
-              //        </div>
-              //      </div>
-              //    `);
-              // }
-              // currentSlides.forEach((slide, index) => {
-              //   console.log({ index, slide });
-              //   model.append(`
-              //     <div class="slick-slide" id="slide${index + 1}">
-              //       <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h2 class="display-3 fw-semibold">Heading</h2>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h4 class="display-5 fw-semibold">Subheading</h4>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center description">
-              //             <p class="lead mb-4">Description</p>
-              //           </div>
-              //           <div class="d-flex justify-content-center align-items-center">
-              //             <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //           </div>
-              //       </div>
-              //     </div>
-              //   `);
-              // });
-
-              // editor.getConfig().allowScripts = 1;
-              // const commands = editor.Commands;
-              // commands.add("my-command-id", (editor) => {
-              //   console.log("This is my command");
-              //   // your jQuery code here
-              //   (<any>$(".slide-show")).slick(
-              //     "slickAdd",
-              //     `<div class="slick-slide" id="slide${newSlidesLength}">
-              //         <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h2 class="display-3 fw-semibold">Heading</h2>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h4 class="display-5 fw-semibold">Subheading</h4>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center description">
-              //             <p class="lead mb-4">Description</p>
-              //           </div>
-              //           <div class="d-flex justify-content-center align-items-center">
-              //             <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //           </div>
-              //         </div>
-              //     </div>`
-              //   );
-              // });
-              // editor.runCommand("my-command-id");
-              // const slideShow = document.querySelector(".slick-track");
-              // console.log({ slideShow });
-              // (<any>$(".addNewSlideButton")).slick(
-              //   "slickAdd",
-              //   /*html*/ `
-              //     <div class="slick-slide" id="slide${newSlidesLength}">
-              //         <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h2 class="display-3 fw-semibold">Heading</h2>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center">
-              //             <h4 class="display-5 fw-semibold">Subheading</h4>
-              //           </div>
-              //           <div class="d-flex align-items-center justify-content-center description">
-              //             <p class="lead mb-4">Description</p>
-              //           </div>
-              //           <div class="d-flex justify-content-center align-items-center">
-              //             <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //           </div>
-              //         </div>
-              //     </div>
-              //   `
-              // );
-              // // Define the script content with an alert statement
-              // var scriptContent = `
-              //   $(".slide-show").slick(
-              //       "slickAdd",
-              //       "
-              //         <div class="slick-slide" id="slide${newSlidesLength}">
-              //           <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //               <div class="d-flex align-items-center justify-content-center">
-              //                 <h2 class="display-3 fw-semibold">Heading</h2>
-              //               </div>
-              //               <div class="d-flex align-items-center justify-content-center">
-              //                 <h4 class="display-5 fw-semibold">Subheading</h4>
-              //               </div>
-              //               <div class="d-flex align-items-center justify-content-center description">
-              //                 <p class="lead mb-4">Description</p>
-              //               </div>
-              //               <div class="d-flex justify-content-center align-items-center">
-              //                 <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //               </div>
-              //           </div>
-              //         </div>
-              //       "
-              //     )
-              // `;
-
-              // // Create a script element
-              // var scriptElement = document.createElement("script");
-
-              // // Set the script content as the innerHTML of the script element
-              // scriptElement.innerHTML = scriptContent;
-              // console.log({ document });
-              // // Append the script element to the document to execute the script
-              // document.body.append(scriptElement);
-
-              // model.set(
-              //   "script",
-              //   `
-              //   <script>
-              //     $(".slide-show").slick(
-              //       "slickAdd",
-              //       "
-              //         <div class="slick-slide" id="slide${newSlidesLength}">
-              //           <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              //               <div class="d-flex align-items-center justify-content-center">
-              //                 <h2 class="display-3 fw-semibold">Heading</h2>
-              //               </div>
-              //               <div class="d-flex align-items-center justify-content-center">
-              //                 <h4 class="display-5 fw-semibold">Subheading</h4>
-              //               </div>
-              //               <div class="d-flex align-items-center justify-content-center description">
-              //                 <p class="lead mb-4">Description</p>
-              //               </div>
-              //               <div class="d-flex justify-content-center align-items-center">
-              //                 <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
-              //               </div>
-              //           </div>
-              //         </div>
-              //       "
-              //     );
-              //   </script>
-
-              // `
-              // );
-              // model.set("script", '<script>alert("Hello, GrapesJS!");</script>');
+                  `
+              );
             },
+          },
+          {
+            type: "select",
+            label: `Hide Slide Indicators`,
+            name: "toggleSlideIndicators",
+            options: [
+              {
+                value: "showSlideIndicators",
+                name: "Show",
+              },
+              {
+                value: "hideSlideIndicators",
+                name: "Hide",
+              },
+            ],
+            changeProp: 1,
           },
         ],
         script,
@@ -366,16 +142,19 @@ export default (editor, options) => {
     },
     view: defaultView.extend({
       onRender({ el, model }) {
-        console.log("default view extend");
-        const onChangeSlideTemplate = (slideName, selectedTemplate) => {
-          console.log({ selectedTemplate, slideName });
+        const onChangeSlideTemplate = (slideName, selectedTemplate, slideNum) => {
+          const slideIndex = slideNum - 1;
           if (selectedTemplate === "removeSlide") {
             model.removeTrait(slideName);
+            el.slick.removeSlide(slideIndex);
           }
+          const slide = document.querySelector(`#${slideName}`);
+          const components = editor.getSelected("components");
+          console.log({ slide, slideName, el, model, components });
         };
 
         const currentNumberOfSlides = el.children.length;
-        console.log({ model });
+
         if (currentNumberOfSlides > 0) {
           for (let slideNum = 1; slideNum <= currentNumberOfSlides; slideNum++) {
             const slideTraitName = `slide${slideNum}`;
@@ -401,13 +180,17 @@ export default (editor, options) => {
             model.addTrait(newTrait);
             model.on(event, () => {
               const selectedTemplate = model.get(slideTraitName);
-              onChangeSlideTemplate(slideTraitName, selectedTemplate);
+              onChangeSlideTemplate(slideTraitName, selectedTemplate, slideNum);
             });
           }
         }
-
-        model.on("change:addNewSlideButton", (component) => {
-          console.log({ component });
+        model.on("change:toggleSlideIndicators", function () {
+          const toggleSlideIndicators = model.get("toggleSlideIndicators");
+          if (toggleSlideIndicators === "hideSlideIndicators") {
+            el.slick.slickSetOption("dots", false, true);
+          } else {
+            el.slick.slickSetOption("dots", true, true);
+          }
         });
       },
     }),

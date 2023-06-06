@@ -8,6 +8,11 @@
       type="text/css"
       href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"
     />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    />
     <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <script src="dist/slick-hero-slider-grapesjs.min.js"></script>
@@ -23,41 +28,314 @@
     <style>
       body,
       html {
-        height: 100%;
+        height: 0;
         margin: 0;
       }
     </style>
   </head>
   <body>
-    <div id="gjs" style="height: 100vh; overflow: hidden"></div>
+    <style>
+      .slick-slider {
+        border: 1px solid gold;
+        min-height: 100vh;
+        height: 100%;
+        position: relative;
+        overflow: hidden;
+      }
+      .slick-prev,
+      .slick-next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #000;
+        background-color: transparent;
+        border: none;
+        padding: 10px;
+        cursor: pointer;
+      }
 
+      .slick-prev.slick-arrow {
+        left: 5px;
+        z-index: 20;
+      }
+      .slick-next.slick-arrow {
+        right: 5px;
+        z-index: 20;
+      }
+      .slick-slider .slick-slide {
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      .slick-slider .slick-slide.slick-current {
+        opacity: 1;
+      }
+
+      .slick-slider .slick-dots {
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+      }
+
+      .slick-slider .slick-dots li {
+        list-style: none;
+        margin: 0 5px;
+      }
+
+      .slick-slider .slick-dots li button {
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        outline: none;
+        text-indent: -9999em;
+      }
+
+      .slick-slider .slick-dots li.slick-active button {
+        background-color: #bbb;
+      }
+      .slide-wrapper {
+        min-height: 100vh;
+        height: 100%;
+        min-width: calc(100vw - 160px);
+        width: 100%;
+      }
+      .basic-hero__wrapper {
+        text-align: center;
+        display: grid;
+        grid-template-rows: repeate(5, 1fr);
+        gap: 1rem;
+      }
+      /* Hero Slide */
+      .hero-slide {
+        background-color: #fff;
+        padding: 80px;
+      }
+      .hero-template-2 {
+        width: 100vw;
+        height: 100vh;
+        padding-right: 5rem;
+        padding-left: 5rem;
+        padding-bottom: 5rem;
+        padding-top: 2rem;
+      }
+      .hero-wrapper {
+        height: 100%;
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+      .hero-content {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+      }
+      .t2-content-left {
+        padding: 4rem 1rem;
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        gap: 1rem;
+        justify-items: stretch;
+        align-items: stretch;
+      }
+      .t2-content-right {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+      }
+      /* .hero-image {
+        height: 200px;
+      } */
+      .image-container {
+        position: relative;
+        max-width: 100%;
+      }
+
+      .image-container img {
+        width: 100%;
+        height: auto;
+      }
+      .description {
+        grid-row: 3 / span 2;
+      }
+      .t3-content-right {
+        padding: 4rem 1rem;
+        display: grid;
+        grid-template-rows: repeat(5, 1fr);
+        gap: 1rem;
+        justify-items: stretch;
+        align-items: stretch;
+      }
+      .t3-content-left {
+        padding: 1rem;
+        display: flex;
+        align-items: center;
+      }
+    </style>
+    <!-- <div id="gjs" style="height: 100vh; overflow: hidden"></div> -->
+    <div class="slick-slider" id="slick-slider">
+      <div class="slick-slide">
+        <div class="hero-slide slide-wrapper basic-hero__wrapper">
+          <div class="d-flex align-items-center justify-content-center">
+            <h2 class="display-3 fw-semibold">Heading</h2>
+          </div>
+          <div class="d-flex align-items-center justify-content-center">
+            <h4 class="display-5 fw-semibold">Subheading</h4>
+          </div>
+          <div class="d-flex align-items-center justify-content-center description">
+            <p class="lead mb-4">Description</p>
+          </div>
+          <div class="d-flex justify-content-center align-items-center">
+            <a href="#" class="btn btn-primary btn-lg px-4 gap-3" id="addNewSlide"">Hover me</a>
+          </div>
+        </div>
+      </div>
+      <div class="slick-slide">
+        <div class="hero-template-2">
+          <div class="hero-wrapper">
+            <div class="hero-content t2-content-left">
+              <div class="d-flex align-items-center justify-content-center">
+                <h2 class="display-3 fw-semibold">Heading</h2>
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
+                <h4 class="display-5 fw-semibold">Subheading</h4>
+              </div>
+              <div class="d-flex align-items-center justify-content-center description">
+                <p class="lead mb-4">Description</p>
+              </div>
+              <div class="d-flex justify-content-center align-items-center">
+                <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+              </div>
+            </div>
+            <div class="hero-content t2-content-right">
+              <div class="image-container">
+                <img
+                  src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                  alt="Add file"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="slick-slide">
+        <div class="hero-template-2">
+          <div class="hero-wrapper">
+            <div class="hero-content t3-content-left">
+              <div class="image-container">
+                <img
+                  src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                  alt="Add file"
+                />
+              </div>
+            </div>
+            <div class="hero-content t3-content-right">
+              <div class="d-flex align-items-center justify-content-center">
+                <h2 class="display-3 fw-semibold">Heading</h2>
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
+                <h4 class="display-5 fw-semibold">Subheading</h4>
+              </div>
+              <div class="d-flex align-items-center justify-content-center description">
+                <p class="lead mb-4">Description</p>
+              </div>
+              <div class="d-flex justify-content-center align-items-center">
+                <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="text/javascript">
-      setTimeout(() => {
-        const editor = grapesjs.init({
-          height: "100%",
-          noticeOnUnload: false,
-          storageManager: false,
-          container: "#gjs",
-          fromElement: true,
-          plugins: ["slick-hero-slider-grapesjs"],
-          pluginsOpts: {
-            "slick-hero-slider-grapesjs": {},
-          },
-          canvas: {
-            styles: [
-              "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
-              "https://fonts.googleapis.com/css2?family=Roboto&display=swap",
-              "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.css",
-            ],
-            scripts: [
-              "http://code.jquery.com/jquery-1.11.0.min.js",
-              "http://code.jquery.com/jquery-migrate-1.2.1.min.js",
-              "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js",
-            ],
-          },
+      $(`.slick-slider`)
+        .not(".slick-initialized")
+        .slick({
+          arrows: true,
+          dots: true,
+          infinite: true,
+          speed: 500,
+          slidesToShow: 1,
+          // centerMode: true,
+          // variableWidth: true,
+          // draggable: true,
+          slidesToScroll: 1,
+          prevArrow: /*html*/ `
+            <button type="button" class="slick-prev">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M29.2504 36.0004L31.4004 33.8504L21.5004 23.9504L31.4004 14.0504L29.2504 11.9004L17.2004 23.9504L29.2504 36.0004Z" fill="black"/>
+              </svg>          
+            </button>
+        `,
+          nextArrow: /*html*/ `
+            <button type="button" class="slick-next">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18.7496 36.0004L16.5996 33.8504L26.4996 23.9504L16.5996 14.0504L18.7496 11.9004L30.7996 23.9504L18.7496 36.0004Z" fill="black"/>
+              </svg>          
+            </button>
+        `,
+          adaptiveHeight: true,
         });
-        window.editor = editor;
-      }, 2000);
+      $("#addNewSlide").on("click", function () {
+        $(".slick-slider").slick(
+          "slickAdd",
+          `
+          <div class="slick-slide" id="slide${4}">
+            <div class="hero-slide slide-wrapper basic-hero__wrapper">
+              <div class="d-flex align-items-center justify-content-center">
+                <h2 class="display-3 fw-semibold">Heading</h2>
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
+                <h4 class="display-5 fw-semibold">Subheading</h4>
+              </div>
+              <div class="d-flex align-items-center justify-content-center description">
+                <p class="lead mb-4">Description</p>
+              </div>
+              <div class="d-flex justify-content-center align-items-center">
+                <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+              </div>
+            </div>
+          </div>
+        `
+        );
+      });
+      // const btn = document.querySelector("#addNewSlide");
+      // btn.addEventListener('click', function() {
+
+      // })
+      // setTimeout(() => {
+      //   const editor = grapesjs.init({
+      //     height: "100%",
+      //     noticeOnUnload: false,
+      //     storageManager: false,
+      //     container: "#gjs",
+      //     fromElement: true,
+      //     plugins: ["slick-hero-slider-grapesjs"],
+      //     pluginsOpts: {
+      //       "slick-hero-slider-grapesjs": {},
+      //     },
+      //     canvas: {
+      //       styles: [
+      //         "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css",
+      //         "https://fonts.googleapis.com/css2?family=Roboto&display=swap",
+      //         "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.css",
+      //       ],
+      //       scripts: [
+      //         "http://code.jquery.com/jquery-1.11.0.min.js",
+      //         "http://code.jquery.com/jquery-migrate-1.2.1.min.js",
+      //         "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js",
+      //       ],
+      //     },
+      //   });
+      //   window.editor = editor;
+      // }, 2000);
     </script>
   </body>
 </html>
