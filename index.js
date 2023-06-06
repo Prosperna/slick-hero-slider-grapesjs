@@ -1,4 +1,3 @@
-import "./node_modules/grapesjs/dist/grapes.min.js";
 import loadComponents from "./src/components.js";
 import loadBlocks from "./src/blocks.js";
 import loadTraits from "./src/traits.js";
