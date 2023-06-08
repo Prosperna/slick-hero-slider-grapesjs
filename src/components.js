@@ -1,4 +1,4 @@
-import { newSlideTrait, onChangeSlideTemplate } from "./lib/helpers";
+import { getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers";
 
 const script = function (props) {
   const classContainer = props.classContainer;
@@ -49,81 +49,8 @@ export default (editor, options) => {
       defaults: {
         traits: [
           {
-            name: "addNewSlideButton",
-            full: true,
-            label: "",
-            type: "button",
-            text: "Add new slide",
-            noLabel: true,
-            changeProp: 1,
-            command: (editor, sender) => {
-              const component = editor.getSelected();
-              console.log({ component });
-              const model = sender.target;
-              const el = sender.target.view.el;
-              const currentSlides = el.children[3].children;
-              console.log({ currentSlides });
-              const currentNumberOfSlides = currentSlides.length;
-              const newSlidesLength = currentNumberOfSlides + 1;
-              const slideTraitName = `slide${newSlidesLength}`;
-
-              model.addTrait(newSlideTrait(slideTraitName, newSlidesLength));
-              model.on(`change:slide${newSlidesLength}`, function () {
-                console.log("hello");
-                // const selectedTemplate = model.get(slideTraitName);
-                // onChangeSlideTemplate({
-                //   slideName: slideTraitName,
-                //   selectedTemplate,
-                //   slideNum: newSlidesLength,
-                //   model,
-                //   el,
-                //   editor,
-                // });
-              });
-
-              el.slick.addSlide(
-                /*html*/
-                `<div class="slick-slide" id="slide${newSlidesLength}">
-                    <div class="hero-template">
-                      <div class="content-left container">
-                        <div class="hero-media">
-                          <div class="image-container">
-                            <img
-                              src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
-                              alt="Add file"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div class="hero-main container">
-                        <h2 class="display-3 fw-semibold heading">Heading</h2>
-                        <h4 class="display-5 fw-semibold subheading">Subheading</h4>
-                        <p class="lead description">Description</p>
-                        <div class="call-to-action">
-                          <a href="#" class="btn btn-primary btn-lg px-4">Hover me</a>
-                        </div>
-                      </div>
-                      <div class="content-right container">
-                        <div class="hero-media">
-                          <div class="image-container">
-                            <img
-                              src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
-                              alt="Add file"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                `
-              );
-              model.set(slideTraitName, "defaultTemplate");
-            },
-          },
-          {
             type: "select",
-            label: `Toggle Slide Indicators`,
+            label: `Slide Indicators`,
             name: "toggleSlideIndicators",
             options: [
               {
@@ -139,7 +66,7 @@ export default (editor, options) => {
           },
           {
             type: "select",
-            label: `Toggle Slide Arrows`,
+            label: `Arrow Controls`,
             name: "toggleSlideArrows",
             options: [
               {
@@ -153,23 +80,32 @@ export default (editor, options) => {
             ],
             changeProp: 1,
           },
+          {
+            type: "custom-button",
+            name: "addNewSlideButton",
+            text: "+ Add New Slide",
+          },
         ],
         script,
         classContainer: options.classContainer,
         "script-props": ["classContainer", "traits"],
       },
       updated(property, value, prev) {
-        // console.log({ property, value, prev });
-
+        const component = value.target;
         // When a slide is removed, update the slide numbers
         if (typeof value !== "string" && value?.models) {
           let count = 1;
-          value.models.map((model, index) => {
-            const attrib = model.attributes;
-            if (attrib.name.includes("slide") && attrib.type === "select" && attrib.name.length < 8) {
-              const newSlideNum = count;
-              const slideTraitName = `slide${newSlideNum}`;
-              const component = value.target;
+          const slideRegex = /slick-slide\d+/;
+          if (slideRegex.test(property)) {
+            component.set(property, value);
+          }
+          value.models.map((trait, index) => {
+            const attrib = trait.attributes;
+            const newSlideNum = count;
+            const newSlideIndex = count - 1;
+            const slideTraitName = getSlideName(newSlideIndex);
+            const component = value.target;
+            if (slideRegex.test(attrib.name) && attrib.type === "custom-select") {
               component.getTrait(attrib.name).set({
                 id: slideTraitName,
                 label: `Slide ${newSlideNum}`,
@@ -177,7 +113,15 @@ export default (editor, options) => {
               });
               count++;
             }
-            return model;
+            return trait;
+          });
+        }
+        if (component?.get("components")) {
+          let count = 0;
+          component.get("components").each((slide) => {
+            const slideTraitName = getSlideName(count);
+            slide.setId(slideTraitName);
+            count++;
           });
         }
       },
@@ -192,15 +136,11 @@ export default (editor, options) => {
     view: defaultView.extend({
       onRender({ el, model }) {
         const currentNumberOfSlides = el.children.length;
-        // for (let childNum = 0; childNum < el.children.length; childNum++) {
-        //   const child = el.children[childNum];
-        //   console.log({ child });
-        // }
         if (currentNumberOfSlides > 0) {
-          for (let slideNum = 1; slideNum <= currentNumberOfSlides; slideNum++) {
-            const child = el.children[slideNum - 1];
-            const slideTraitName = `slide${slideNum}`;
+          for (let slideIndex = 0; slideIndex < currentNumberOfSlides; slideIndex++) {
+            const slideTraitName = getSlideName(slideIndex);
             const event = `change:${slideTraitName}`;
+            const slideNum = slideIndex + 1;
             model.addTrait(newSlideTrait(slideTraitName, slideNum));
             model.set(slideTraitName, "defaultTemplate");
             model.on(event, () => {
@@ -234,6 +174,18 @@ export default (editor, options) => {
           }
         });
       },
+      // onRender({ el, model }) {},
     }),
+  });
+  editor.on("component:update:traits", function (model, otherprops) {
+    // console.log("model on component update", { model, otherprops });
+    if (typeof editor !== typeof undefined) {
+      // console.log({ component: editor.getSelected() });
+    }
+  });
+  editor.on("run:preview", function (model, otherprops) {
+    editor.DomComponents.getWrapper().onAll((comp) => {
+      console.log({ comp });
+    });
   });
 };

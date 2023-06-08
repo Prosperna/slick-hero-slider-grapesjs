@@ -1,63 +1,111 @@
 /* eslint-disable import/no-anonymous-default-export */
 
+import { getSlideIndex, getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers";
+
 export default (editor, options) => {
   const tm = editor.TraitManager;
-  tm.addType("addNewSlideButton", {
-    noLabel: true,
-    // events: {
-    //   click: function (props) {
-    //     console.log("inside traits", props);
-    //   },
-    // },
-    // getInputEl() {
-    //   let button = document.createElement("button");
-    //   button.id = "addNewSlide";
-    //   button.setAttribute("class", "bg-blue-500 p-4 w-full rounded-sm text-white");
-    //   button.setAttribute("id", "addNewSlide");
-    //   button.appendChild(document.createTextNode("Add a new slide"));
-    //   return button;
-    // },
-    createInput(props) {
-      const component = editor.getSelected(); // Component selected in canvas
-      const traits = component.get("traits");
-      console.log({ props, traits });
-      // Here we can decide to use properties from the trait
+  tm.addType("custom-select", {
+    createInput({ trait, component }) {
+      const model = component;
+      const el = component.view.el;
+      const options = trait.get("options") || [];
+      const value = trait.get("value");
+      const select = document.createElement("select");
+      options.forEach((opt) => {
+        const option = document.createElement("option");
+        option.value = opt.value;
+        option.text = opt.name;
+        select.add(option);
+      });
+      select.value = value;
+      select.addEventListener("change", () => {
+        trait.set("value", select.value);
+      });
+      const closeButton = document.createElement("button");
+      closeButton.textContent = "x";
+      closeButton.addEventListener("click", () => {
+        model.removeTrait(trait.id);
+        el.slick.removeSlide(getSlideIndex(trait.id));
+      });
+      const container = document.createElement("div");
+      container.setAttribute("class", "flex items-center justify-center");
+      container.appendChild(select);
+      select.setAttribute("class", "border w-full focus:outline-none py-2 px-1");
+      container.appendChild(closeButton);
+      closeButton.setAttribute("class", "p-3 text-lg text-black");
+      return container;
+    },
+    templateInput: '<div style="border: none; padding: 0; margin: 0;" data-input></div>',
+  });
+  tm.addType("custom-button", {
+    createInput({ trait, component }) {
+      const model = component;
+      const el = component.view.el;
 
-      // Create a new element container and add some content
-      let el = document.createElement("button");
-      el.id = "addNewSlideButton";
-      el.setAttribute("class", "bg-blue-500 p-4 w-full rounded-sm text-white");
-      el.setAttribute("id", "addNewSlideButton");
-      el.appendChild(document.createTextNode("Add a new slide"));
-      $("#addNewSlideButton").on("click", function () {
-        $(".slick-slider").slick(
-          "slickAdd",
-          `
-          <div class="slick-slide" id="slide${4}">
-            <div class="hero-slide slide-wrapper basic-hero__wrapper">
-              <div class="d-flex align-items-center justify-content-center">
-                <h2 class="display-3 fw-semibold">Heading</h2>
+      const input = document.createElement("button");
+      input.textContent = trait.get("text") || "";
+      input.setAttribute("class", "bg-blue-500 p-4 w-full rounded-sm text-white");
+      input.addEventListener("click", () => {
+        const currentSlides = el.children[3].children;
+
+        const currentNumberOfSlides = currentSlides.length;
+        const newSlidesLength = currentNumberOfSlides + 1;
+        const slideTraitName = getSlideName(currentNumberOfSlides);
+
+        model.addTrait(newSlideTrait(slideTraitName, newSlidesLength));
+        model.set(slideTraitName, "defaultTemplate");
+        el.slick.addSlide(`
+          <div class="slick-slide" id="${getSlideName(currentNumberOfSlides)}">
+            <div class="hero-template">
+              <div class="content-left container">
+                <div class="hero-media">
+                  <div class="image-container">
+                    <img
+                      src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                      alt="Add file"
+                    />
+                  </div>
+                </div>
               </div>
-              <div class="d-flex align-items-center justify-content-center">
-                <h4 class="display-5 fw-semibold">Subheading</h4>
+              <div class="hero-main container">
+                <h2 class="display-3 fw-semibold heading">Heading</h2>
+                <h4 class="display-5 fw-semibold subheading">Subheading</h4>
+                <p class="lead description">Description</p>
+                <div class="call-to-action">
+                  <a href="#" class="btn btn-primary btn-lg px-4">Hover me</a>
+                </div>
               </div>
-              <div class="d-flex align-items-center justify-content-center description">
-                <p class="lead mb-4">Description</p>
-              </div>
-              <div class="d-flex justify-content-center align-items-center">
-                <a href="#" class="btn btn-primary btn-lg px-4 gap-3">Hover me</a>
+              <div class="content-right container">
+                <div class="hero-media">
+                  <div class="image-container">
+                    <img
+                      src="https://p1-mediaserver.s3.ap-southeast-1.amazonaws.com/builder/assets/images/add-file-image.png"
+                      alt="Add file"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-        `
-        );
+        </div>
+        `);
+        model.on(`change:${slideTraitName}`, function () {
+          const selectedTemplate = model.get(slideTraitName);
+          onChangeSlideTemplate({
+            slideName: slideTraitName,
+            selectedTemplate,
+            slideNum: newSlidesLength,
+            model,
+            el,
+            editor,
+          });
+        });
+        el.slick.refresh();
       });
-      return el;
+      return input;
     },
-    events: {
-      click: function (clickProps) {
-        console.log({ clickProps });
-      },
-    },
+    full: true,
+    noLabel: true,
+    templateInput: '<div style="border: none; padding: 0; margin: 0;" data-input></div>',
   });
 };

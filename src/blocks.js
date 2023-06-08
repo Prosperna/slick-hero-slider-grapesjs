@@ -146,7 +146,7 @@ export default (editor, options) => {
     `,
     content: /* html */ ` 
       <div class="slick-slider" id="slick-slider">
-        <div class="slick-slide" id="slide1">
+        <div class="slick-slide" id="slick-slide00">
           <div class="hero-template">
             <div class="content-left container">
               <div class="hero-media">
@@ -178,7 +178,7 @@ export default (editor, options) => {
             </div>
           </div>
         </div>
-        <div class="slick-slide" id="slide2">
+        <div class="slick-slide" id="slick-slide01">
           <div class="hero-template">
             <div class="content-left container">
               <div class="hero-media">
@@ -210,7 +210,7 @@ export default (editor, options) => {
             </div>
           </div>
         </div>
-        <div class="slick-slide" id="slide3">
+        <div class="slick-slide" id="slick-slide02">
           <div class="hero-template">
             <div class="content-left container">
               <div class="hero-media">
