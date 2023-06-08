@@ -56,7 +56,9 @@ export default (editor, options) => {
             text: "Add new slide",
             noLabel: true,
             changeProp: 1,
-            command: (_, sender) => {
+            command: (editor, sender) => {
+              const component = editor.getSelected();
+              console.log({ component });
               const model = sender.target;
               const el = sender.target.view.el;
               const currentSlides = el.children[3].children;
@@ -67,14 +69,16 @@ export default (editor, options) => {
 
               model.addTrait(newSlideTrait(slideTraitName, newSlidesLength));
               model.on(`change:slide${newSlidesLength}`, function () {
-                const selectedTemplate = model.get(slideTraitName);
-                onChangeSlideTemplate({
-                  slideName: slideTraitName,
-                  selectedTemplate,
-                  slideNum: newSlidesLength,
-                  model,
-                  el,
-                });
+                console.log("hello");
+                // const selectedTemplate = model.get(slideTraitName);
+                // onChangeSlideTemplate({
+                //   slideName: slideTraitName,
+                //   selectedTemplate,
+                //   slideNum: newSlidesLength,
+                //   model,
+                //   el,
+                //   editor,
+                // });
               });
 
               el.slick.addSlide(
@@ -154,20 +158,24 @@ export default (editor, options) => {
         classContainer: options.classContainer,
         "script-props": ["classContainer", "traits"],
       },
-      updated(prop, value, prev) {
-        console.log({ prop, value, prev });
-        if (typeof value !== "string") {
+      updated(property, value, prev) {
+        // console.log({ property, value, prev });
+
+        // When a slide is removed, update the slide numbers
+        if (typeof value !== "string" && value?.models) {
+          let count = 1;
           value.models.map((model, index) => {
             const attrib = model.attributes;
-            if (attrib.name.includes("slide") && attrib.type === "select") {
-              const newSlideNum = 4 - index;
+            if (attrib.name.includes("slide") && attrib.type === "select" && attrib.name.length < 8) {
+              const newSlideNum = count;
               const slideTraitName = `slide${newSlideNum}`;
-              console.log({ model });
-              // model.setAttributes({
-              //   id: slideTraitName,
-              //   label: `Slide ${newSlideNum}`,
-              //   name: slideTraitName,
-              // });
+              const component = value.target;
+              component.getTrait(attrib.name).set({
+                id: slideTraitName,
+                label: `Slide ${newSlideNum}`,
+                name: slideTraitName,
+              });
+              count++;
             }
             return model;
           });
@@ -203,7 +211,6 @@ export default (editor, options) => {
                 slideName: slideTraitName,
                 selectedTemplate,
                 slideNum,
-                child,
               });
             });
           }
