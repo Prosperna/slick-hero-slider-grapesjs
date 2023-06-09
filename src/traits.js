@@ -1,6 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 
-import { getSlideIndex, getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers";
+import { getSlideIndex, getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers.js";
 
 export default (editor, options) => {
   const tm = editor.TraitManager;
