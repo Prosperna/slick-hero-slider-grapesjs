@@ -1,6 +1,5 @@
 const withMediaSlideContainerStyle = "display: grid; grid-template-columns: repeat(2, 1fr)";
-const withMediaSlideContentStyle =
-  "padding: 1rem; display: flex; align-items: center; justify-content: center;";
+const withMediaSlideContentStyle = "padding: 1rem; display: flex; justify-content: center";
 const withoutMediaSlideContentStyle = "display: none;";
 export const newSlideTrait = (slideName, slideNum) => ({
   type: "custom-select",

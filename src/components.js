@@ -184,8 +184,6 @@ export default (editor, options) => {
     }
   });
   editor.on("run:preview", function (model, otherprops) {
-    editor.DomComponents.getWrapper().onAll((comp) => {
-      console.log({ comp });
-    });
+    editor.DomComponents.getWrapper().onAll((comp) => {});
   });
 };
