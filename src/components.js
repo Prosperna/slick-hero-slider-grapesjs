@@ -1,4 +1,4 @@
-import { getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers";
+import { getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers.js";
 
 const script = function (props) {
   const classContainer = props.classContainer;
