@@ -177,13 +177,60 @@ export default (editor, options) => {
       // onRender({ el, model }) {},
     }),
   });
-  editor.on("component:update:traits", function (model, otherprops) {
-    // console.log("model on component update", { model, otherprops });
-    if (typeof editor !== typeof undefined) {
-      // console.log({ component: editor.getSelected() });
-    }
-  });
+  // editor.on("component:update:traits", function (model, otherprops) {
+  //   // console.log("model on component update", { model, otherprops });
+  //   if (typeof editor !== typeof undefined) {
+  //     // console.log({ component: editor.getSelected() });
+  //   }
+  // });
   editor.on("run:preview", function (model, otherprops) {
-    editor.DomComponents.getWrapper().onAll((comp) => {});
+    editor.DomComponents.getWrapper().onAll((comp) => {
+      if (comp.is("hero")) {
+        comp.get("components").each((slide) => {
+          slide.get("components").each((heroContainer) => {
+            heroContainer.get("components").each((heroContent) => {
+              const heroContentClasses = heroContent.getClasses();
+              if (
+                heroContentClasses.includes("content-left") ||
+                heroContentClasses.includes("content-right")
+              ) {
+                heroContent.get("components").each((heroMedia) => {
+                  heroMedia.get("components").each((imgVideoEmptyState) => {
+                    imgVideoEmptyState.setAttributes({
+                      style: "display: none;",
+                    });
+                  });
+                });
+              }
+            });
+          });
+        });
+      }
+    });
+  });
+  editor.on("stop:preview", () => {
+    editor.DomComponents.getWrapper().onAll((comp) => {
+      if (comp.is("hero")) {
+        comp.get("components").each((slide) => {
+          slide.get("components").each((heroContainer) => {
+            heroContainer.get("components").each((heroContent) => {
+              const heroContentClasses = heroContent.getClasses();
+              if (
+                heroContentClasses.includes("content-left") ||
+                heroContentClasses.includes("content-right")
+              ) {
+                heroContent.get("components").each((heroMedia) => {
+                  heroMedia.get("components").each((imgVideoEmptyState) => {
+                    imgVideoEmptyState.setAttributes({
+                      style: "display: block;",
+                    });
+                  });
+                });
+              }
+            });
+          });
+        });
+      }
+    });
   });
 };
