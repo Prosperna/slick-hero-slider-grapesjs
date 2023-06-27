@@ -1,9 +1,9 @@
 import { getSlideName, newSlideTrait, onChangeSlideTemplate } from "./lib/helpers.js";
 
-const script = function (props) {
-  const classContainer = props.classContainer;
+const script = function () {
+  // const classContainer = props.classContainer;
   const initializeLibrary = function () {
-    $(`.${classContainer}`)
+    $(`.slick-slider-hero`)
       .not(".slick-initialized")
       .slick({
         arrows: true,
@@ -32,7 +32,7 @@ const script = function (props) {
   if (typeof $.fn.slick() == undefined) {
     const script = document.createElement("script");
     script.onload = initializeLibrary;
-    script.src = "https://www.jsdelivr.com/projects/jquery.slick";
+    script.src = "https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js";
     document.body.appendChild(script);
   } else {
     initializeLibrary();
@@ -87,8 +87,8 @@ export default (editor, options) => {
           },
         ],
         script,
-        classContainer: options.classContainer,
-        "script-props": ["classContainer", "traits"],
+        // classContainer: options.classContainer,
+        // "script-props": ["classContainer", "traits"],
       },
       updated(property, value, prev) {
         const component = value.target;

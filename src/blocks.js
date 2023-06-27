@@ -1,9 +1,9 @@
-// eslint-disable-next-line import/no-anonymous-default-export
+// eslint-disable-next-line import/no-anonymous-default-exportslick-slider
 export default (editor, options) => {
   const bm = editor.BlockManager;
   const style = /*css*/ `
     <style>
-      .slick-slider {
+      .slick-slider-hero {
         min-height: calc(100vh - 5rem);
         height: 90%;
         position: relative;
@@ -32,16 +32,16 @@ export default (editor, options) => {
         right: 5px;
         z-index: 20;
       }
-      .slick-slider .slick-slide {
+      .slick-slider-hero .slick-slide {
         opacity: 0;
         transition: opacity 0.3s;
       }
 
-      .slick-slider .slick-slide.slick-current {
+      .slick-slider-hero .slick-slide.slick-current {
         opacity: 1;
       }
 
-      .slick-slider .slick-dots {
+      .slick-slider-hero .slick-dots {
         position: absolute;
         bottom: 20px;
         left: 0;
@@ -51,12 +51,12 @@ export default (editor, options) => {
         padding: 0;
       }
 
-      .slick-slider .slick-dots li {
+      .slick-slider-hero .slick-dots li {
         list-style: none;
         margin: 0 5px;
       }
 
-      .slick-slider .slick-dots li button {
+      .slick-slider-hero .slick-dots li button {
         background-color: #fff;
         border: 1px solid rgba(0, 0, 0, 0.2);
         border-radius: 50%;
@@ -67,7 +67,7 @@ export default (editor, options) => {
         text-indent: -9999em;
       }
 
-      .slick-slider .slick-dots li.slick-active button {
+      .slick-slider-hero .slick-dots li.slick-active button {
         background-color: #bbb;
       }
       .slick-slide {
@@ -184,7 +184,7 @@ export default (editor, options) => {
       </svg>
     `,
     content: /* html */ ` 
-      <div class="slick-slider" id="slick-slider">
+      <div class="slick-slider-hero" id="slick-slider-hero">
         <div class="slick-slide" id="slick-slide00">
           <div class="hero-template">
             <div class="content-left container">
