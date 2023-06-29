@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/no-anonymous-default-export
 // eslint-disable-next-line import/no-anonymous-default-exportslick-slider
-import { AddMediaSvg } from "./components/AddMediaISvg";
+import { AddMediaSvg } from "./components/AddMediaISvg.js";
 
 export default (editor, options) => {
   const bm = editor.BlockManager;
