@@ -7,7 +7,7 @@ export default (editor, options) => {
     label: "Hero",
     name: "hero",
     category: "Elements",
-    classContainer: "slick-slider",
+    classContainer: "slick-slider-hero",
   };
 
   for (let name in localOptions) {
